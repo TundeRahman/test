@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template to create a Redshift cluster and subnet group'
+
+Resources:
+  RedshiftSubnetGroup:
+    Type: AWS::Redshift::ClusterSubnetGroup
+    Properties:
+      Description: 'Subnet group for Redshift cluster'
+      SubnetIds:
+      - subnet-00d5e6b3f0c5c035b # us-east-1a
+      - subnet-074ba61e060ebb97d # us-east-1b
+      - subnet-02eddd491c3622f10 # us-east-1c
+      Tags:
+      - Key: Name
+        Value: my-redshift-subnet-group
+
+  RedshiftCluster:
+    Type: AWS::Redshift::Cluster
+    Properties:
+      ClusterType: 'multi-node'
+      NodeType: 'dc2.large'
+      NumberOfNodes: 8
+      ClusterIdentifier: 'sparkify-dwh'
+      DBName: 'sparkify'
+      MasterUsername: 'babs_udacity'
+      MasterUserPassword: 'TundeRahman123!#' # Replace with a secure password
+      ClusterSubnetGroupName: !Ref RedshiftSubnetGroup
+      PubliclyAccessible: true
+      VpcSecurityGroupIds:
+      - !Ref RedshiftSecurityGroup
+
+  RedshiftSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Security group for Redshift cluster'
+      VpcId: 'vpc-07ad49f6168eb555d'
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 5439
+        ToPort: 5439
+        CidrIp: 137.186.41.198/32 # Restrict access to your IP
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        FromPort: 0
+        ToPort: 0
+        CidrIp: 137.186.41.198/32 # Allow outbound traffic to your IP
+      Tags:
+      - Key: Name
+        Value: redshift-security-group
+
+Outputs:
+  RedshiftClusterEndpoint:
+    Description: 'Redshift cluster endpoint'
+    Value: !GetAtt RedshiftCluster.Endpoint.Address
+

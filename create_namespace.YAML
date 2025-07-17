@@ -1,0 +1,10 @@
+Resources:
+  NameSpaceResource:
+    Type: AWS::RedshiftServerless::Namespace
+    Properties:
+      AdminUsername: "tunde.h.rahman"
+      AdminUserPassword: "Tunde123!#Tunde123!#"
+      DbName: TrafficData
+      # DefaultIamRoleArn: "arn:aws:iam::624707886997:role/my-redshift-service-role"
+      NamespaceName: "traffic-data-namespace"
+
