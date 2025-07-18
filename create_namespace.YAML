@@ -5,6 +5,21 @@ Resources:
       AdminUsername: "tunde.h.rahman"
       AdminUserPassword: "Tunde123!#Tunde123!#"
       DbName: TrafficData
-      # DefaultIamRoleArn: "arn:aws:iam::624707886997:role/my-redshift-service-role"
       NamespaceName: "traffic-data-namespace"
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "redshift.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+      RoleName: MyRedshiftRole
 
