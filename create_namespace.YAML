@@ -1,11 +1,13 @@
 Resources:
-  NameSpaceResource:
+  Namespace:
     Type: AWS::RedshiftServerless::Namespace
     Properties:
       AdminUsername: "tunde.h.rahman"
       AdminUserPassword: "Tunde123!#Tunde123!#"
       DbName: TrafficData
       NamespaceName: "traffic-data-namespace"
+      IamRoles: 
+       - MyRedshiftRole
   Role:
     Type: AWS::IAM::Role
     Properties:
@@ -22,4 +24,6 @@ Resources:
           ]
         }
       RoleName: MyRedshiftRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
